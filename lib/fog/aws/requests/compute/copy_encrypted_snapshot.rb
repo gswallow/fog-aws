@@ -22,9 +22,9 @@ module Fog
           storage = ::Fog::Storage.new(:provider => 'AWS')
 
           request(
-            'Action'          => 'CopySnapshot',
-            'SourceSnapshotId'=> source_snapshot_id,
-            'SourceRegion'    => source_region,
+#            'Action'          => 'CopySnapshot',
+#            'SourceSnapshotId'=> source_snapshot_id,
+#            'SourceRegion'    => source_region,
             'Description'     => description,
             'Encrypted'       => 'true',
             'PresignedUrl'    => storage.signed_url({:query => {'Action' => 'CopySnapshot', 'SourceRegion' => source_region, 'SourceSnapshotId' => source_snapshot_id, 'DestinationRegion' => target_region}}, (Time.now + 3600).to_i),
