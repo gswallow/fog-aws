@@ -75,6 +75,7 @@ module Fog
       request :create_vpc
       request :copy_image
       request :copy_snapshot
+      request :copy_encrypted_snapshot
       request :delete_dhcp_options
       request :delete_internet_gateway
       request :delete_key_pair
@@ -459,7 +460,7 @@ module Fog
           @region                 = options[:region] ||= 'us-east-1'
           @instrumentor           = options[:instrumentor]
           @instrumentor_name      = options[:instrumentor_name] || 'fog.aws.compute'
-          @version                = options[:version]     ||  '2014-10-01'
+          @version                = options[:version]     ||  '2015-04-15'
 
           @use_iam_profile = options[:use_iam_profile]
           setup_credentials(options)
