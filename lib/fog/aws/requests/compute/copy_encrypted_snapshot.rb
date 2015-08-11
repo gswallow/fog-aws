@@ -18,17 +18,18 @@ module Fog
         #     * 'snapshotId'<~String> - id of snapshot
         #
         # {Amazon API Reference}[http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/ApiReference-query-CopySnapshot.html]
-        def copy_encrypted_snapshot(source_snapshot_id, source_region, target_region, description = nil)
+        def copy_encrypted_snapshot(source_snapshot_id, source_region, target_region, kms_key_id, description = nil)
           storage = ::Fog::Storage.new(:provider => 'AWS')
 
           request(
-#            'Action'          => 'CopySnapshot',
-#            'SourceSnapshotId'=> source_snapshot_id,
-#            'SourceRegion'    => source_region,
-            'Description'     => description,
-            'Encrypted'       => 'true',
-            'PresignedUrl'    => storage.signed_url({:query => {'Action' => 'CopySnapshot', 'SourceRegion' => source_region, 'SourceSnapshotId' => source_snapshot_id, 'DestinationRegion' => target_region}}, (Time.now + 3600).to_i),
-            :parser       => Fog::Parsers::Compute::AWS::CopySnapshot.new
+            'Action'           => 'CopySnapshot',
+            'SourceSnapshotId' => source_snapshot_id,
+            'SourceRegion'     => source_region,
+            'Description'      => description,
+            'Encrypted'        => 'true',
+            'KmsKeyId'         => kms_key_id,
+            'PresignedUrl'     => storage.signed_url({:query => {'Action' => 'CopySnapshot', 'SourceRegion' => source_region, 'SourceSnapshotId' => source_snapshot_id, 'DestinationRegion' => target_region}}, (Time.now + 3600).to_i),
+            :parser            => Fog::Parsers::Compute::AWS::CopySnapshot.new
           )
         end
       end
@@ -40,7 +41,7 @@ module Fog
         # Fog::AWS[:compute].copy_snapshot("snap-1db0a957", 'us-east-1', 'description', true, 'us-west-2')
         #
 
-        def copy_encrypted_snapshot(source_snapshot_id, source_region, target_region, description = nil)
+        def copy_encrypted_snapshot(source_snapshot_id, source_region, target_region, kms_key_id, description = nil)
           response = Excon::Response.new
           response.status = 200
           snapshot_id = Fog::AWS::Mock.snapshot_id
